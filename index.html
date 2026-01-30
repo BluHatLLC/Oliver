@@ -7,7 +7,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body { background: #0a0a0a; margin: 0; }
-    
     #cart-sidebar {
       position: fixed;
       top: 5rem;
@@ -24,12 +23,10 @@
       opacity: 0;
       transition: transform 0.4s ease, opacity 0.3s ease;
     }
-    
     #cart-sidebar.open {
       transform: translateX(0);
       opacity: 1;
     }
-
     .product {
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
@@ -38,8 +35,6 @@
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
     }
     .cart-btn:hover { transform: scale(1.05); }
-
-    /* Uniform payment buttons */
     .payment-btn {
       min-height: 120px;
       display: flex;
@@ -72,8 +67,9 @@
   <div class="max-w-7xl mx-auto px-4 py-10">
     <p class="text-center text-xl text-gray-400 mb-10">Printed in Holland, Michigan • Local pickup or school delivery</p>
 
-    <!-- Products Grid -->
+    <!-- Products Grid – ALL FIVE ITEMS INCLUDED -->
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6" id="products">
+
       <div class="bg-gray-900 rounded-2xl overflow-hidden shadow-2xl product" data-name="Glow Dragon" data-price="45">
         <img loading="lazy" src="https://i.etsystatic.com/38728207/r/il/ed236d/6176071764/il_570xN.6176071764_7duz.jpg" alt="Glow in the dark articulated dragon 3D print" class="w-full h-72 md:h-80 object-cover">
         <div class="p-5">
@@ -118,10 +114,11 @@
           <button class="w-full mt-4 bg-gradient-to-r from-emerald-500 to-teal-600 py-4 rounded-xl font-bold text-lg add-to-cart">Add to Cart</button>
         </div>
       </div>
+
     </div>
   </div>
 
-  <!-- Compact Top-Right Cart Panel -->
+  <!-- Cart Sidebar -->
   <div id="cart-sidebar">
     <div class="flex justify-between items-center mb-4">
       <h2 class="text-3xl font-black">Your Cart</h2>
@@ -142,27 +139,22 @@
         <button id="close-modal" class="text-5xl">×</button>
       </div>
       <p class="text-4xl text-center mb-12 text-cyan-400" id="final-total">Total: $0</p>
+
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
         <div class="text-center">
           <p class="text-2xl font-bold mb-2">Venmo</p>
           <p class="text-lg mb-3">@Oliver3D</p>
-          <button 
-            onclick="openVenmo()" 
-            class="payment-btn bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-4 rounded-xl font-bold text-lg w-full shadow-xl">
+          <button id="venmo-btn" class="payment-btn bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-4 rounded-xl font-bold text-lg w-full shadow-xl">
             Pay with Venmo
           </button>
         </div>
-
         <div class="text-center">
           <p class="text-2xl font-bold mb-2">Cash App</p>
           <p class="text-lg mb-3">$Oliver3D</p>
-          <button 
-            onclick="openCashApp()" 
-            class="payment-btn bg-gradient-to-r from-green-500 to-teal-600 px-6 py-4 rounded-xl font-bold text-lg w-full shadow-xl">
+          <button id="cashapp-btn" class="payment-btn bg-gradient-to-r from-green-500 to-teal-600 px-6 py-4 rounded-xl font-bold text-lg w-full shadow-xl">
             Pay with Cash App
           </button>
         </div>
-
         <div class="text-center">
           <p class="text-2xl font-bold mb-2">Cash at School</p>
           <p class="text-lg mb-3">Exact change preferred</p>
@@ -239,14 +231,15 @@
         document.getElementById('checkout-modal').classList.add('hidden');
       });
 
-      document.getElementById('venmo-option').addEventListener('click', () => {
+      // Payment selections
+      document.getElementById('venmo-btn').addEventListener('click', () => {
         selectedPayment = "Venmo";
         document.getElementById('form-title').textContent = "Payment sent?";
         document.getElementById('form-message').textContent = "Just tell Oliver who you are so he can find you!";
         document.getElementById('order-details-form').classList.remove('hidden');
       });
 
-      document.getElementById('cashapp-option').addEventListener('click', () => {
+      document.getElementById('cashapp-btn').addEventListener('click', () => {
         selectedPayment = "Cash App";
         document.getElementById('form-title').textContent = "Payment sent?";
         document.getElementById('form-message').textContent = "Just tell Oliver who you are so he can find you!";
@@ -293,19 +286,17 @@
     };
 
     function openVenmo() {
-      const url = "https://venmo.com/Oliver3D";
-      window.open(url, '_blank');
+      window.open("https://venmo.com/Oliver3D", '_blank');
     }
 
     function openCashApp() {
-      const url = "https://cash.app/$Oliver3D";
-      window.open(url, '_blank');
+      window.open("https://cash.app/$Oliver3D", '_blank');
     }
 
     window.fakeSubmit = function() {
       const nameInput = document.querySelector('#order-details-form input[placeholder="Your name (required)"]');
       const messageInput = document.querySelector('#order-details-form textarea');
-      
+
       const name = nameInput.value.trim();
       const message = messageInput.value.trim() || "None";
       const payment = selectedPayment || "Not selected";
@@ -320,23 +311,20 @@
       const total = cart.reduce((s, i) => s + i.price * (i.quantity || 1), 0).toFixed(2);
 
       const formId = "1FAIpQLSc4Ey_FznPCIGT3lvRtM2Gitv9abYDo7bFiqYQFK9Cm-1nAFA";
-      
+
       const formData = new FormData();
-      formData.append("entry.2109242064", name);         // Your Name
-      formData.append("entry.978084084", itemsList);     // Order Items
-      formData.append("entry.727275002", total);         // Total Amount
-      formData.append("entry.933236810", message);       // Message
-      formData.append("entry.283713791", payment);       // Payment Method
+      formData.append("entry.2109242064", name);
+      formData.append("entry.978084084", itemsList);
+      formData.append("entry.727275002", total);
+      formData.append("entry.933236810", message);
+      formData.append("entry.283713791", payment);
 
       fetch(`https://docs.google.com/forms/d/e/${formId}/formResponse`, {
         method: "POST",
         mode: "no-cors",
         body: formData
       }).then(() => {
-        alert(`Order placed successfully! Oliver has been notified.\n\n` +
-              `Payment Method: ${payment}\n` +
-              `Items:\n${itemsList}\n` +
-              `Total: $${total}`);
+        alert(`Order placed successfully! Oliver has been notified.\n\nPayment Method: ${payment}\nItems:\n${itemsList}\nTotal: $${total}`);
         location.reload();
       }).catch(err => {
         console.error("Submission error:", err);
