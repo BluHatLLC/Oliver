@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Oliver's 3D Prints</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #0a0a0a; margin: 0; }
+    
+    #cart-sidebar {
+      position: fixed;
+      top: 5rem;
+      right: 1rem;
+      width: 22rem;
+      max-height: 80vh;
+      overflow-y: auto;
+      background: #111827;
+      border-radius: 1rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      z-index: 50;
+      padding: 1.5rem;
+      transform: translateX(120%);
+      opacity: 0;
+      transition: transform 0.4s ease, opacity 0.3s ease;
+    }
+    
+    #cart-sidebar.open {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    .product {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .product:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    }
+    .cart-btn:hover { transform: scale(1.05); }
+
+    /* Uniform payment buttons */
+    .payment-btn {
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+  </style>
+</head>
+<body class="text-white">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-gradient-to-r from-gray-900 to-black shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-4xl md:text-5xl font-black bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-600 bg-clip-text text-transparent">
+        OLIVER'S 3D PRINTS
+      </h1>
+      <button id="cart-btn" class="relative bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-3 rounded-xl flex items-center gap-3 shadow-xl cart-btn transition-transform">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
+          <circle cx="9" cy="21" r="1"/>
+          <circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <span id="cart-count" class="bg-red-600 text-white text-sm font-bold rounded-full w-8 h-8 flex items-center justify-center absolute -top-2 -right-2">0</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-4 py-10">
+    <p class="text-center text-xl text-gray-400 mb-10">Printed in Holland, Michigan • Local pickup or school delivery</p>
+
+    <!-- Products Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6" id="products">
+      <div class="bg-gray-900 rounded-2xl overflow-hidden shadow-2xl product" data-name="Glow Dragon" data-price="45">
+        <img loading="lazy" src="https://i.etsystatic.com/38728207/r/il/ed236d/6176071764/il_570xN.6176071764_7duz.jpg" alt="Glow in the dark articulated dragon 3D print" class="w-full h-72 md:h-80 object-cover">
+        <div class="p-5">
+          <h3 class="font-black text-xl">Glow Dragon</h3>
+          <p class="text-cyan-400 text-3xl font-bold">$45</p>
+          <button class="w-full mt-4 bg-gradient-to-r from-cyan-500 to-blue-600 py-4 rounded-xl font-bold text-lg add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="bg-gray-900 rounded-2xl overflow-hidden shadow-2xl product" data-name="Flexi Baby Yoda" data-price="25">
+        <img loading="lazy" src="https://media.printables.com/media/prints/80913/images/867358_5441ca5e-9ce0-42a1-92fc-d4e259abfca7/thumbs/inside/1280x960/jpg/large_display_babyyodapost_3c_80913.webp" alt="Flexi articulated Baby Yoda Grogu 3D print" class="w-full h-72 md:h-80 object-cover">
+        <div class="p-5">
+          <h3 class="font-black text-xl">Flexi Baby Yoda</h3>
+          <p class="text-green-400 text-3xl font-bold">$25</p>
+          <button class="w-full mt-4 bg-gradient-to-r from-green-500 to-teal-600 py-4 rounded-xl font-bold text-lg add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="bg-gray-900 rounded-2xl overflow-hidden shadow-2xl product" data-name="Cyber Skull" data-price="32">
+        <img loading="lazy" src="https://fbi.cults3d.com/uploaders/17862244/photo-file/430550f6-3b70-4002-9a9e-54b4b4531d1f/PXL_20231028_173758805~2.jpg" alt="Cyberpunk style skull 3D print" class="w-full h-72 md:h-80 object-cover">
+        <div class="p-5">
+          <h3 class="font-black text-xl">Cyber Skull</h3>
+          <p class="text-red-400 text-3xl font-bold">$32</p>
+          <button class="w-full mt-4 bg-gradient-to-r from-red-600 to-pink-600 py-4 rounded-xl font-bold text-lg add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="bg-gray-900 rounded-2xl overflow-hidden shadow-2xl product" data-name="Light-Up Pokeball" data-price="38">
+        <img loading="lazy" src="https://fbi.cults3d.com/uploaders/15511226/illustration-file/5c3bcfcc-6678-4fa4-a1cf-ae18315167e8/Pokeball_LightBox_2023-Dec-27_08-11-43PM-000_CustomizedView32439528234.png" alt="LED light-up Pokeball 3D print" class="w-full h-72 md:h-80 object-cover">
+        <div class="p-5">
+          <h3 class="font-black text-xl">Light-Up Pokeball</h3>
+          <p class="text-yellow-400 text-3xl font-bold">$38</p>
+          <button class="w-full mt-4 bg-gradient-to-r from-yellow-500 to-orange-600 py-4 rounded-xl font-bold text-lg add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="bg-gray-900 rounded-2xl overflow-hidden shadow-2xl product" data-name="Flexi T-Rex" data-price="28">
+        <img loading="lazy" src="https://makerworld.bblmw.com/makerworld/model/US7066705a15cce/design/2024-09-04_64e493c5e003d.png?x-oss-process=image/resize,w_1000/format,webp" alt="Flexi articulated T-Rex dinosaur 3D print" class="w-full h-72 md:h-80 object-cover">
+        <div class="p-5">
+          <h3 class="font-black text-xl">Flexi T-Rex</h3>
+          <p class="text-emerald-400 text-3xl font-bold">$28</p>
+          <button class="w-full mt-4 bg-gradient-to-r from-emerald-500 to-teal-600 py-4 rounded-xl font-bold text-lg add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compact Top-Right Cart Panel -->
+  <div id="cart-sidebar">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-3xl font-black">Your Cart</h2>
+      <button id="close-cart" class="text-4xl hover:text-gray-300">×</button>
+    </div>
+    <div id="cart-items" class="space-y-4 mb-6"></div>
+    <div class="text-2xl font-bold text-cyan-400 mb-6" id="total">Total: $0</div>
+    <button id="checkout-btn" class="w-full bg-gradient-to-r from-cyan-500 to-purple-600 py-4 rounded-xl font-black text-lg">
+      Checkout
+    </button>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div id="checkout-modal" class="fixed inset-0 bg-black bg-opacity-95 hidden flex items-center justify-center z-50 p-6">
+    <div class="bg-gray-900 rounded-3xl p-10 max-w-3xl w-full max-h-screen overflow-y-auto">
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-5xl font-black">Choose Payment Method</h2>
+        <button id="close-modal" class="text-5xl">×</button>
+      </div>
+      <p class="text-4xl text-center mb-12 text-cyan-400" id="final-total">Total: $0</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div class="text-center">
+          <p class="text-2xl font-bold mb-2">Venmo</p>
+          <p class="text-lg mb-3">@Oliver3D</p>
+          <button 
+            onclick="openVenmo()" 
+            class="payment-btn bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-4 rounded-xl font-bold text-lg w-full shadow-xl">
+            Pay with Venmo
+          </button>
+        </div>
+
+        <div class="text-center">
+          <p class="text-2xl font-bold mb-2">Cash App</p>
+          <p class="text-lg mb-3">$Oliver3D</p>
+          <button 
+            onclick="openCashApp()" 
+            class="payment-btn bg-gradient-to-r from-green-500 to-teal-600 px-6 py-4 rounded-xl font-bold text-lg w-full shadow-xl">
+            Pay with Cash App
+          </button>
+        </div>
+
+        <div class="text-center">
+          <p class="text-2xl font-bold mb-2">Cash at School</p>
+          <p class="text-lg mb-3">Exact change preferred</p>
+          <button id="cash-at-school-btn" class="payment-btn bg-gradient-to-r from-green-500 to-emerald-600 px-6 py-4 rounded-xl font-bold text-lg w-full shadow-xl">
+            Bring Cash Tomorrow
+          </button>
+        </div>
+      </div>
+
+      <div id="order-details-form" class="hidden space-y-6">
+        <h3 class="text-3xl font-bold text-center mb-4" id="form-title">Almost done!</h3>
+        <p class="text-xl text-center text-gray-300 mb-8" id="form-message"></p>
+        <input type="text" placeholder="Your name (required)" required class="w-full p-5 bg-gray-800 rounded-xl text-xl">
+        <textarea placeholder="Message (optional)" class="w-full p-5 bg-gray-800 rounded-xl text-xl" rows="3"></textarea>
+        <button onclick="fakeSubmit()" class="w-full bg-green-600 hover:bg-green-500 py-6 rounded-2xl font-black text-2xl">
+          Submit Order → Oliver gets notified
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let cart = [];
+    let selectedPayment = "";
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const cartBtn = document.getElementById('cart-btn');
+      const cartSidebar = document.getElementById('cart-sidebar');
+      const closeCart = document.getElementById('close-cart');
+      const checkoutBtn = document.getElementById('checkout-btn');
+      const closeModal = document.getElementById('close-modal');
+
+      cartBtn.addEventListener('click', () => {
+        updateCart();
+        cartSidebar.classList.add('open');
+      });
+
+      closeCart.addEventListener('click', () => {
+        cartSidebar.classList.remove('open');
+      });
+
+      document.addEventListener('click', e => {
+        if (cartSidebar.classList.contains('open') &&
+            !cartSidebar.contains(e.target) &&
+            !cartBtn.contains(e.target)) {
+          cartSidebar.classList.remove('open');
+        }
+      });
+
+      document.querySelectorAll('.add-to-cart').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const product = e.target.closest('.product');
+          const name = product.dataset.name;
+          const price = Number(product.dataset.price);
+          const existing = cart.find(item => item.name === name);
+          if (existing) {
+            existing.quantity = (existing.quantity || 1) + 1;
+          } else {
+            cart.push({ name, price, quantity: 1 });
+          }
+          updateCart();
+        });
+      });
+
+      checkoutBtn.addEventListener('click', () => {
+        if (cart.length === 0) return alert("Your cart is empty!");
+        const total = cart.reduce((sum, i) => sum + i.price * (i.quantity || 1), 0);
+        document.getElementById('final-total').textContent = `Total: $${total.toFixed(0)}`;
+        document.getElementById('checkout-modal').classList.remove('hidden');
+        cartSidebar.classList.remove('open');
+      });
+
+      closeModal.addEventListener('click', () => {
+        document.getElementById('checkout-modal').classList.add('hidden');
+      });
+
+      document.getElementById('venmo-option').addEventListener('click', () => {
+        selectedPayment = "Venmo";
+        document.getElementById('form-title').textContent = "Payment sent?";
+        document.getElementById('form-message').textContent = "Just tell Oliver who you are so he can find you!";
+        document.getElementById('order-details-form').classList.remove('hidden');
+      });
+
+      document.getElementById('cashapp-option').addEventListener('click', () => {
+        selectedPayment = "Cash App";
+        document.getElementById('form-title').textContent = "Payment sent?";
+        document.getElementById('form-message').textContent = "Just tell Oliver who you are so he can find you!";
+        document.getElementById('order-details-form').classList.remove('hidden');
+      });
+
+      document.getElementById('cash-at-school-btn').addEventListener('click', () => {
+        selectedPayment = "Cash";
+        document.getElementById('form-title').textContent = "Cash tomorrow!";
+        document.getElementById('form-message').textContent = "Oliver will bring your items to school — bring exact cash!";
+        document.getElementById('order-details-form').classList.remove('hidden');
+      });
+    });
+
+    function updateCart() {
+      const itemsDiv = document.getElementById('cart-items');
+      const totalDiv = document.getElementById('total');
+      const countSpan = document.getElementById('cart-count');
+
+      itemsDiv.innerHTML = cart.map((item, index) => `
+        <div class="bg-gray-800 p-4 rounded-xl flex justify-between items-center text-lg">
+          <div>
+            <span>${item.name}</span>
+            <span class="text-cyan-400 ml-2">×${item.quantity || 1}</span>
+            <span class="block text-sm text-gray-400">$${item.price} each</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <span class="font-bold text-xl">$${(item.price * (item.quantity || 1)).toFixed(0)}</span>
+            <button onclick="removeFromCart(${index})" class="text-red-400 hover:text-red-300 text-2xl font-bold">×</button>
+          </div>
+        </div>
+      `).join('');
+
+      const total = cart.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
+      totalDiv.textContent = `Total: $${total.toFixed(0)}`;
+
+      const count = cart.reduce((sum, i) => sum + (i.quantity || 1), 0);
+      countSpan.textContent = count;
+    }
+
+    window.removeFromCart = function(index) {
+      cart.splice(index, 1);
+      updateCart();
+    };
+
+    function openVenmo() {
+      const url = "https://venmo.com/Oliver3D";
+      window.open(url, '_blank');
+    }
+
+    function openCashApp() {
+      const url = "https://cash.app/$Oliver3D";
+      window.open(url, '_blank');
+    }
+
+    window.fakeSubmit = function() {
+      const nameInput = document.querySelector('#order-details-form input[placeholder="Your name (required)"]');
+      const messageInput = document.querySelector('#order-details-form textarea');
+      
+      const name = nameInput.value.trim();
+      const message = messageInput.value.trim() || "None";
+      const payment = selectedPayment || "Not selected";
+
+      if (!name) {
+        alert("Please enter your name before submitting the order.");
+        nameInput.focus();
+        return;
+      }
+
+      const itemsList = cart.map(i => `${i.name} ×${i.quantity || 1} ($${i.price})`).join('\n');
+      const total = cart.reduce((s, i) => s + i.price * (i.quantity || 1), 0).toFixed(2);
+
+      const formId = "1FAIpQLSc4Ey_FznPCIGT3lvRtM2Gitv9abYDo7bFiqYQFK9Cm-1nAFA";
+      
+      const formData = new FormData();
+      formData.append("entry.2109242064", name);         // Your Name
+      formData.append("entry.978084084", itemsList);     // Order Items
+      formData.append("entry.727275002", total);         // Total Amount
+      formData.append("entry.933236810", message);       // Message
+      formData.append("entry.283713791", payment);       // Payment Method
+
+      fetch(`https://docs.google.com/forms/d/e/${formId}/formResponse`, {
+        method: "POST",
+        mode: "no-cors",
+        body: formData
+      }).then(() => {
+        alert(`Order placed successfully! Oliver has been notified.\n\n` +
+              `Payment Method: ${payment}\n` +
+              `Items:\n${itemsList}\n` +
+              `Total: $${total}`);
+        location.reload();
+      }).catch(err => {
+        console.error("Submission error:", err);
+        alert("Order placed locally, but there was an issue notifying Oliver.\nPlease tell him manually or check your connection.");
+      });
+    };
+  </script>
+</body>
+</html>
